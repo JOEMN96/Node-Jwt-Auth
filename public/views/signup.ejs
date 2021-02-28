@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./templates/head') %>
+  <body>
+    <%- include("./templates/nav")%>
+    <main class="signup">
+      <form class="signupForm">
+        <h2>SignUp</h2>
+        <input type="email" name="email" placeholder="Enter Email" id="email" />
+        <div>
+          <p class="emailError"></p>
+        </div>
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter Password"
+          id="password"
+        />
+        <div>
+          <p class="passwordError"></p>
+          pp
+        </div>
+
+        <button type="submit">Sign up</button>
+      </form>
+    </main>
+    <%- include('./templates/footer')%>
+    <script src="../static/app.js"></script>
+  </body>
+</html>
