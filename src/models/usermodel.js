@@ -27,12 +27,26 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   // Document is not created (this hook fires before the document creation)
   // This refers to the user (ini dha create aga poguthu)
-  console.log("fired");
   let salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  console.log(this);
   next();
 });
+
+// statics method on model (statics methods are user defined methods)
+
+userSchema.statics.logIn = async function (email, password) {
+  // this refers to userSchema itself
+
+  const user = await this.findOne({ email });
+  if (user) {
+    const verifyPW = await bcrypt.compare(password, user.password);
+    if (verifyPW) {
+      return user;
+    }
+    throw Error("Incorrect Password");
+  }
+  throw Error("Incorrect Email");
+};
 
 const User = mongoose.model("user", userSchema);
 

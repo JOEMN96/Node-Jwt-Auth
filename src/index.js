@@ -4,14 +4,18 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const routes = require("./routes/authRouter");
-const cookie = require("cookie-parser");
+const cookieParser = require("cookie-parser");
+const {
+  isUserAuthinticated,
+  checkUser,
+} = require("./middlewares/authmiddleWare");
 
 const PORT = process.env.PORT || 3000;
 
 // MiddleWares
 app.use(express.static("public"));
 app.use(express.json());
-app.use(cookie());
+app.use(cookieParser());
 
 // Set ups
 app.set("view engine", "ejs");
@@ -33,16 +37,14 @@ mongoose
 
 // Routes
 
-app.get("/", (req, res) => {
+app.get("*", checkUser);
+
+app.get("/", checkUser, (req, res) => {
   // res.setHeader("set-cookie", "user=joe");
-  res.cookie("user", "mon", { maxAge: 1000 * 60 * 60 * 24, httpOnly: true });
+  // res.cookie("user", "mon", { maxAge: 1000 * 60 * 60 * 24, httpOnly: true });
   // console.log(req.cookies);
   res.render("index");
 });
-app.get("/profile", (req, res) => {
-  res.render("profile");
-});
+app.get("/profile", isUserAuthinticated, (req, res) => res.render("profile"));
 app.use(routes);
-app.get("/*", (req, res) => {
-  res.render("404");
-});
+app.get("/*", (req, res) => res.render("404"));

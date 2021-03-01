@@ -5,6 +5,12 @@
   <div>
     <a href="/">Home</a>
     <a href="/Profile">Profile</a>
-    <a href="signup">SignUp</a>
+    <% if (user) { %>
+    <a href="Profile"> <%= user.email %> </a>
+    <a href="/logout">Logout</a>
+    <% } else { %>
+    <a href="/signup">SignUp</a>
+    <a href="/login">Login</a>
+    <% } %>
   </div>
 </nav>
